@@ -15,3 +15,4 @@ use App\Http\Controllers\Pilota;
 */
 
 Route::get('/pilotak', [Pilota::class, 'getPilotak']);
+Route::get('/delete/{id}', [Pilota::class, 'deletePilota']);
