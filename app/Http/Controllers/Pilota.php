@@ -30,4 +30,18 @@ class Pilota extends Controller
         }
         return $pilotak;
     }
+
+    public function deletePilota($id) {
+        return DB::select("DELETE FROM versenyzok WHERE id = ?", array($id));
+    }
+
+
+    public function insertPilota() {
+        
+        $requestPayload = file_get_contents("php://input");
+        $pilota = json_decode($requestPayload)->params->ujpilota;
+
+        return DB::select("INSERT INTO versenyzok (nev, szuletes, csapat) VALUES (?, NOW(), ?)",
+                         array($pilota->nev, $pilota->csapat->ID));
+    }
 }

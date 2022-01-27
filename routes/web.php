@@ -14,5 +14,12 @@ use App\Http\Controllers\Pilota;
 |
 */
 
-Route::get('/pilotak', [Pilota::class, 'getPilotak']);
-Route::get('/delete/{id}', [Pilota::class, 'deletePilota']);
+Route::get('/api/pilotak', [Pilota::class, 'getPilotak']);
+
+Route::delete('/api/pilota/{id}', [Pilota::class, 'deletePilota']);
+
+Route::post('/api/pilota', [Pilota::class, 'insertPilota']);
+
+Route::get('api/csrf', function() {
+    return csrf_token();
+});
