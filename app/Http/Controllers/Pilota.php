@@ -26,22 +26,43 @@ class Pilota extends Controller
                                             csapatok.nemzet AS 'csapatnemzet'
                                     FROM versenyzok 
                                     INNER JOIN csapatok ON csapatok.csapatid = versenyzok.csapat 
-                                    WHERE versenyzok.nemzet = ?", array($query));
+                                    WHERE versenyzok.nemzet LIKE ? 
+                                    OR versenyzok.nev LIKE ?
+                                    OR versenyzok.magassag = ?", array("%".$query."%",
+                                                                       "%".$query."%",
+                                                                       $query));
         }
         return $pilotak;
     }
 
     public function deletePilota($id) {
-        return DB::select("DELETE FROM versenyzok WHERE id = ?", array($id));
-    }
 
+        $deleted = DB::table('versenyzok')->where('id', $id)->delete();
+
+        //return DB::delete("DELETE FROM versenyzok WHERE id = ?", array($id));
+    }
 
     public function insertPilota() {
         
         $requestPayload = file_get_contents("php://input");
         $pilota = json_decode($requestPayload)->params->ujpilota;
 
-        return DB::select("INSERT INTO versenyzok (nev, szuletes, csapat) VALUES (?, NOW(), ?)",
-                         array($pilota->nev, $pilota->csapat->ID));
+        DB::table('versenyzok')->insert([(array)$pilota]);
+        return DB::table('versenyzok')->latest('ID')->first();
+
+       /* return DB::insert("INSERT INTO versenyzok (nev, szuletes, csapat) VALUES (?, ?, ?)",
+                         array($pilota->nev, $pilota->szuletes, $pilota->csapat));*/
+    }
+
+    public function updatePilota() {
+        
+        $requestPayload = file_get_contents("php://input");
+        $pilota = json_decode($requestPayload)->params->ujpilota;
+        
+        DB::table('versenyzok')
+            ->where('ID', $pilota->ID)
+            ->update([(array)$pilota]);
+
+        return DB::table('versenyzok')->latest('ID')->first();
     }
 }
