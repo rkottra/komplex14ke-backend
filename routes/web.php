@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Pilota;
+use App\Http\Controllers\PilotaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +14,11 @@ use App\Http\Controllers\Pilota;
 |
 */
 
-Route::get('/api/pilotak', [Pilota::class, 'getPilotak']);
+Route::get('/api/pilotak', [PilotaController::class, 'getPilotak']);
 
-Route::delete('/api/pilota/{id}', [Pilota::class, 'deletePilota']);
+Route::delete('/api/pilota/{id}', [PilotaController::class, 'deletePilota']);
 
-Route::post('/api/pilota', [Pilota::class, 'insertPilota']);
+Route::post('/api/pilota', [PilotaController::class, 'insertPilota']);
 
 Route::get('api/csrf', function() {
     return csrf_token();

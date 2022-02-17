@@ -5,22 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Pilota;
+use App\Models\Csapat;
 
-class Pilota extends Controller
+class PilotaController extends Controller
 {
     public function getPilotak(Request $request) {
         
+        
+
         $query = $request->input('q');
         
         if ($query == "") {
-            $pilotak = DB::select("SELECT versenyzok.ID, versenyzok.nev, versenyzok.nemzet, 
+
+            return Pilota::with('csapat')->get();
+            /*$pilotak = DB::select("SELECT versenyzok.ID, versenyzok.nev, versenyzok.nemzet, 
                                             versenyzok.szuletes, versenyzok.magassag,
                                             csapatok.csapatID, csapatok.csapatnev, 
                                             csapatok.nemzet AS 'csapatnemzet'
                                     FROM versenyzok 
-                                    INNER JOIN csapatok ON csapatok.csapatid = versenyzok.csapat");
+                                    INNER JOIN csapatok ON csapatok.csapatid = versenyzok.csapat");*/
         } else {
-            $pilotak = DB::select("SELECT versenyzok.ID, versenyzok.nev, versenyzok.nemzet, 
+            return Pilota::with('csapat')->where('nemzet', $query)->get();
+            /*$pilotak = DB::select("SELECT versenyzok.ID, versenyzok.nev, versenyzok.nemzet, 
                                             versenyzok.szuletes, versenyzok.magassag,
                                             csapatok.csapatID, csapatok.csapatnev, 
                                             csapatok.nemzet AS 'csapatnemzet'
@@ -30,9 +37,8 @@ class Pilota extends Controller
                                     OR versenyzok.nev LIKE ?
                                     OR versenyzok.magassag = ?", array("%".$query."%",
                                                                        "%".$query."%",
-                                                                       $query));
+                                                                       $query));*/
         }
-        return $pilotak;
     }
 
     public function deletePilota($id) {
